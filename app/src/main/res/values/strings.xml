@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Car Crash Detection</string>
+    <string name="description">Create New Account</string>
+    <string name="Email">Email</string>
+    <string name="Password">Passowrd</string>
+    <string name="title">Car Crash Detection</string>
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_Close">Close Navigation Drawer</string>
+</resources>

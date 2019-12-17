@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "980386233455",
+    "firebase_url": "https://car-crash-detection.firebaseio.com",
+    "project_id": "car-crash-detection",
+    "storage_bucket": "car-crash-detection.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980386233455:android:84a42276e03cd3d96da19a",
+        "android_client_info": {
+          "package_name": "com.example.carcrashdetection"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "980386233455-ltd87bmd3h1jpono3s69sruvkagjsmso.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.carcrashdetection",
+            "certificate_hash": "46e175ef92758ab4848e8404e780499a4ec2f70d"
+          }
+        },
+        {
+          "client_id": "980386233455-4s5g681ij4jcogqakdtjgr057056b0nf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnA5gy9myjWSm_MJPGk_iqjxNAz4FHf_M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "980386233455-4s5g681ij4jcogqakdtjgr057056b0nf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
