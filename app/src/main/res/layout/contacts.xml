@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="100dp"
             android:layout_marginRight="50dp"
             android:background="@drawable/round"
             android:ems="10"
@@ -37,35 +37,7 @@
             android:textColor="@android:color/white"
             android:textColorHint="#FAF7F8" />
 
-        <EditText
-            android:id="@+id/emailReg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="50dp"
-            android:background="@drawable/round"
-            android:ems="10"
-            android:hint="Email"
-            android:inputType="textPersonName"
-            android:padding="10dp"
-            android:textColor="@android:color/white"
-            android:textColorHint="#FAFAFA" />
 
-        <EditText
-            android:id="@+id/passwordReg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="50dp"
-            android:background="@drawable/round"
-            android:ems="10"
-            android:hint="@string/Password"
-            android:padding="10dp"
-            android:textColor="@android:color/white"
-            android:textColorHint="#FAFAFA"
-            android:inputType="textPassword" />
         <EditText
             android:id="@+id/phoneReg"
             android:layout_width="match_parent"
@@ -85,7 +57,7 @@
             android:id="@+id/buttonReg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="50dp"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
             android:background="@drawable/roundbtn"
@@ -101,5 +73,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/datarecieved"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="@color/yellow"
+            />
 
 </LinearLayout>

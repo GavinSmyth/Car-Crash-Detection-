@@ -21,7 +21,7 @@
         android:textColor="@android:color/white" />
 
     <EditText
-        android:id="@+id/nameReg"
+        android:id="@+id/makeOfCar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
@@ -36,7 +36,7 @@
         android:textColorHint="#FAF7F8" />
 
     <EditText
-        android:id="@+id/emailReg"
+        android:id="@+id/typeOfCar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
@@ -51,7 +51,7 @@
         android:textColorHint="#FAFAFA" />
 
     <EditText
-        android:id="@+id/passwordReg"
+        android:id="@+id/yearOfCar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
@@ -63,10 +63,10 @@
         android:padding="10dp"
         android:textColor="@android:color/white"
         android:textColorHint="#FAFAFA"
-        android:inputType="textPassword" />
+         />
 
     <Button
-        android:id="@+id/buttonReg"
+        android:id="@+id/addCar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"

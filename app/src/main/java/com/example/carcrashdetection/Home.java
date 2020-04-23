@@ -1,128 +1,201 @@
 package com.example.carcrashdetection;
 
-import android.hardware.SensorManager;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.Gravity;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.widget.LinearLayout;
+import android.widget.CompoundButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SnapHelper;
 
-import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Home extends Fragment {
 
-    RecyclerView eventsPlace;
-
+    private RecyclerView eventsPlace;
+    private View homeView;
+    RecyclerView contactsView;
+    private FirebaseRecyclerOptions<Event> options;
+    private FirebaseRecyclerOptions<contact> options1;
+    private FirebaseRecyclerAdapter<contact, contactAdapter>adapter1;
+    private int lastCheckedPos = -1;
+    private FirebaseRecyclerAdapter<Event, eventAdapter>adapter;
+    contactAdapter ContactAdpater;
+    List<contact> contactList;
     eventAdapter EventAdapter;
-    List<Event> eventList;
-    private SensorManager sm;
-    private float acelVal; // current acceleration value and gravity
-    private float acelLast; //Last acceloration value and gravity
-    private float shake;
+    private ArrayList<Event> eventList;
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference databaseReference;
+    DatabaseReference databaseReference1;
+    Event event;
+    Cars cars;
+    public static String number;
+
+
+
+
+
+
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.home, container, false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        homeView = inflater.inflate(R.layout.home, container, false);
+        return homeView;
 
 
 
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+        adapter1.startListening();
+        if (adapter == null) {
+            System.out.print("Doesnt Exist");
+        }
+        if(adapter1 == null){
+            System.out.print("Doesnt Exist");
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+       adapter.stopListening();
+       adapter1.stopListening();
+    }
+
+
+
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
+        final SharedPreferences sharedPref = Home.this.getActivity().getPreferences(Context.MODE_PRIVATE);
+        final boolean checked = sharedPref.getBoolean("checkbox", false);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Cars");
+        databaseReference1 = FirebaseDatabase.getInstance().getReference().child("phone");
+        event = new Event();
         eventsPlace = (RecyclerView) getView().findViewById(R.id.eventsplace);
-        eventList = new ArrayList<>();
-        eventList.add(
-                new Event(
-                        "Mercedes",
-                        "Saloon",
-                        "2004"
-                )
-        );
-        eventList.add(
-                new Event(
-                        "Mercedes",
-                        "Saloon",
-                        "2004"
-                )
-        );
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        eventsPlace.setLayoutManager(linearLayoutManager);
-        eventsPlace.setHasFixedSize(true);
-
-        EventAdapter = new eventAdapter(getActivity(), eventList);
-        eventsPlace.setAdapter(EventAdapter);
-        final SnapHelper snapHelper = new GravitySnapHelper(Gravity.START);
-        snapHelper.attachToRecyclerView(eventsPlace);
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        contactsView = (RecyclerView) getView().findViewById(R.id.contactsView);
+        databaseReference1.keepSynced(true);
+        databaseReference.keepSynced(true);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        final SharedPreferences.Editor editor = preferences.edit();
+        options1 = new FirebaseRecyclerOptions.Builder<contact>().setQuery(databaseReference1,contact.class).build();
+        options = new FirebaseRecyclerOptions.Builder<Event>().setQuery(databaseReference,Event.class).build();
+        adapter1 = new FirebaseRecyclerAdapter<contact, contactAdapter>(options1) {
             @Override
-            public void run() {
-                //DO Something ater 1ms = 100ms
-                RecyclerView.ViewHolder viewHolderDefault = eventsPlace.findViewHolderForAdapterPosition(0);
-                LinearLayout eventparentDefault = viewHolderDefault.itemView.findViewById(R.id.eventParent);
-                eventparentDefault.animate().scaleY(1).scaleX(1).setDuration(350).setInterpolator(new AccelerateInterpolator()).start();
-                LinearLayout eventcategoryDefault = viewHolderDefault.itemView.findViewById(R.id.eventbadge);
-                eventcategoryDefault.animate().alpha(1).setDuration(300).start();
-
-
-            }
-            },100);
-
-
-        //set a timer for defaul item
-        eventsPlace.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-                if(newState == RecyclerView.SCROLL_STATE_IDLE){
-                    View view = snapHelper.findSnapView(linearLayoutManager);
-                    int pos = linearLayoutManager.getPosition(view);
-                    RecyclerView.ViewHolder viewHolder = eventsPlace .findViewHolderForAdapterPosition(pos);
-
-                    LinearLayout eventParent  = viewHolder.itemView.findViewById(R.id.eventParent);
-                    eventParent.animate().scaleX(1).scaleY(1).setDuration(350).setInterpolator(new AccelerateInterpolator()).start();
-                    LinearLayout eventcategory = viewHolder.itemView.findViewById(R.id.eventbadge);
-                    eventcategory.animate().alpha(1).setDuration(300).start();
-
-                }else{
-                    View view = snapHelper.findSnapView(linearLayoutManager);
-                    int pos = linearLayoutManager.getPosition(view);
-                    RecyclerView.ViewHolder viewHolder = eventsPlace .findViewHolderForAdapterPosition(pos);
-
-                    LinearLayout eventParent  = viewHolder.itemView.findViewById(R.id.eventParent);
-                    eventParent.animate().scaleX(0.6f).scaleY(0.6f).setDuration(350).setInterpolator(new AccelerateInterpolator()).start();
-                    LinearLayout eventcategory = viewHolder.itemView.findViewById(R.id.eventbadge);
-                    eventcategory.animate().alpha(1).setDuration(300).start();
+            protected void onBindViewHolder(@NonNull final contactAdapter holder, final int position, @NonNull contact model) {
+                holder.contactName.setText(model.getContactName());
+                holder.contactPhone.setText(model.getContactPhone());
+                if(lastCheckedPos == position){
+                    holder.chk.setChecked(true);
                 }
+                else{
+                    holder.chk.setChecked(false);
+                }
+                holder.chk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (position == lastCheckedPos) {
+                            holder.chk.setChecked(checked);
+                            lastCheckedPos = -1;
+                        }else {
+                            lastCheckedPos = position;
+                            for (int i = 0; i < adapter1.getItemCount(); i++) {
+                                if (adapter1.getItem(i).isSelected(true)) {
+                                    number = ((TextView) holder.itemView.findViewById(R.id.contactPhone)).getText().toString();
+                                    Toast.makeText(getActivity(), "Data Inserted....." + number, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            contactsView.post(new Runnable()
+                            {
+                                @Override
+                                public void run() {
+                                    adapter1.notifyDataSetChanged();
+                                }
+                            });
+
+                        }
+                    }
+                });
             }
 
+            @NonNull
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            public contactAdapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return new contactAdapter(LayoutInflater.from(getActivity()).inflate(R.layout.item_contacts, parent, false));
+
             }
-        });
+        };
+        contactsView.setAdapter(adapter1);
+        LinearLayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        contactsView.setLayoutManager(layoutManager1);
+
+
+
+
+
+
+        adapter = new FirebaseRecyclerAdapter<Event, eventAdapter>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull eventAdapter holder, int position, @NonNull final Event model) {
+                holder.make.setText(model.getCarMake());
+                holder.type.setText(model.getCarType());
+                holder.year.setText(model.getCarYear());
+
+//                holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Intent intent = new Intent(getActivity(), contact.class);
+//                        intent.putExtra("make", model.getCarMake());
+//                        intent.putExtra("type", model.getCarType());
+//                        intent.putExtra("year", model.getCarYear());
+//                        startActivity(intent);
+//                    }
+//                });
+
+            }
+
+            @NonNull
+            @Override
+            public eventAdapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return new eventAdapter(LayoutInflater.from(getActivity()).inflate(R.layout.item_event, parent, false));
+
+            }
+        };
+        eventsPlace.setAdapter(adapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        eventsPlace.setLayoutManager(layoutManager);
+
+
+
+
+
 
 
 
 
     }
+
 
 
 }
