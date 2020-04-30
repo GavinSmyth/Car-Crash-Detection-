@@ -1,23 +1,23 @@
  package com.example.carcrashdetection;
 
  import android.content.Intent;
- import android.os.Bundle;
- import android.text.TextUtils;
- import android.util.Log;
- import android.view.View;
- import android.widget.Button;
- import android.widget.EditText;
- import android.widget.ProgressBar;
- import android.widget.TextView;
- import android.widget.Toast;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
- import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 
- import com.google.android.gms.tasks.OnCompleteListener;
- import com.google.android.gms.tasks.Task;
- import com.google.firebase.auth.AuthResult;
- import com.google.firebase.auth.FirebaseAuth;
- import com.google.firebase.auth.FirebaseUser;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
  public class Login extends AppCompatActivity {
     EditText mEmail, mPassword;
@@ -25,11 +25,13 @@
     TextView mCreateBtn;
     ProgressBar progressBar;
     FirebaseAuth firebaseAuth;
+    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        title = (TextView) findViewById(R.id.title1);
         FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             // User is signed in

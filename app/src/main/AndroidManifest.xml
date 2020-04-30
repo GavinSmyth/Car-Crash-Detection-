@@ -20,6 +20,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -28,10 +29,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".updateDeleteCars"></activity>
+        <activity android:name=".updateDelete" />
+
         <service
             android:name=".MQTTService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <activity android:name=".alert" />
         <activity android:name=".MainActivity" />
@@ -49,13 +53,13 @@
 
         <service android:name="org.eclipse.paho.android.service.MqttService" />
         <service
-            android:name=".helpers.MqttHelper"
-            android:enabled="true"
-            android:exported="false" />
-        <service
             android:name=".MQTTService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

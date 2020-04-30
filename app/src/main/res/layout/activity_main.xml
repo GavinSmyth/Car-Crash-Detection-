@@ -21,10 +21,11 @@
 
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
+            android:background="@color/dark_grey"
             android:id="@+id/toolbar"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:titleTextColor="@android:color/white"
             android:elevation="4dp"/>
 
         <FrameLayout
@@ -41,7 +42,7 @@
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
             android:background="@drawable/roundbtn"
-            android:textColor="#ffffff"
+            android:textColor="@color/black"
             android:text="Logout" />
 
     </LinearLayout>

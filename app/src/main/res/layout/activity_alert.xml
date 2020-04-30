@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/blue"
+        android:background="@color/grey"
         android:orientation="vertical">
 
         <TextView
@@ -18,9 +18,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
+            android:fontFamily="@font/langdon"
             android:text="Alarm"
             android:textAlignment="center"
-            android:textColor="@color/yellow"
+            android:textColor="@color/black"
             android:textSize="25sp" />
 
         <TextView
@@ -28,13 +29,22 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="TextView"
-            android:layout_marginTop="120dp"
+            android:layout_marginTop="60dp"
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
-            android:textColor="@color/yellow"
+            android:textColor="@color/black"
             android:textAlignment="center"
 
             />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            style="@android:style/Widget"
+            android:progress="0"
+            android:max="10"
+            />
+
 
         <Button
             android:id="@+id/stop"
@@ -44,7 +54,8 @@
             android:background="@drawable/roundbtn"
             android:layout_marginTop="50dp"
             android:layout_marginRight="100dp"
-            android:layout_marginLeft="100dp"/>
+            android:layout_marginLeft="100dp"
+            android:textColor="@color/white"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

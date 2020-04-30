@@ -7,7 +7,7 @@
         android:id="@+id/eventParent"
         android:layout_width="240dp"
         android:layout_height="300dp"
-        android:background="@drawable/border_style"
+        android:background="@color/grey"
         android:layout_marginRight="24dp"
         android:paddingRight="24dp"
         android:orientation="vertical"

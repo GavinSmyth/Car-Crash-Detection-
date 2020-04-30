@@ -1,11 +1,15 @@
 package com.example.carcrashdetection;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.SensorManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.MenuItem;
 import android.widget.Button;
 
@@ -18,7 +22,6 @@ import androidx.core.content.PermissionChecker;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-//import com.example.carcrashdetection.helpers.MqttHelper;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -32,6 +35,8 @@ import com.nabinbhandari.android.permissions.Permissions;
 
 import java.util.ArrayList;
 
+//import com.example.carcrashdetection.helpers.MqttHelper;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private SensorManager sm;
@@ -42,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     Activity context;
     public static String uri;
     private FusedLocationProviderClient fusedLocationClient;
+    public static int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 5469;
 
     private LocationRequest locationRequest;
 
@@ -54,7 +60,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //startMqtt();
+        checkPermission1();
+
 
         Intent i = new Intent(MainActivity.this, MQTTService.class);
 
@@ -77,8 +84,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         if(savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_Container,
-                    new Cars()).commit();
-            navigationView.setCheckedItem(R.id.nav_car);
+                    new Home()).commit();
+            navigationView.setCheckedItem(R.id.home);
         }
 
 
@@ -90,21 +97,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.SEND_SMS},1);
         ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.FOREGROUND_SERVICE},1);
+        ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW},1);
+
         callPermissions();
 
+    }
+    @TargetApi(Build.VERSION_CODES.M)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-//        fusedLocationClient.getLastLocation()
-//                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-//                    @Override
-//                    public void onSuccess(Location location) {
-//                        // Got last known location. In some rare situations this can be null.
-//                        if (location != null) {
-//                            uri = "http://maps.google.com/maps?saddr=" + location.getLatitude()+","+location.getLongitude();
-//                        }
-//                    }
-//                });
-//
-//
+        if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
+            if (!Settings.canDrawOverlays(this)) {
+                // You don't have permission
+                checkPermission1();
+            } else {
+                // Do as per your logic
+            }
+
+        }
+
     }
 
     @Override
@@ -124,8 +136,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.logoutNav:
-                FirebaseAuth fAuth = FirebaseAuth.getInstance();
-                fAuth.signOut();
+                firebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getApplicationContext(),Login.class));
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -140,30 +152,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         super.onBackPressed();
     }
-//    private void startMqtt(){
-//        mqttHelper = new MqttHelper(getApplicationContext());
-//        mqttHelper.setCallback(new MqttCallbackExtended(){
-//            @Override
-//            public void connectComplete(boolean b, String s) {
-//                Toast.makeText(MainActivity.this, "connected ", Toast.LENGTH_SHORT).show();
-//
-//            }
-//            public void connectionLost(Throwable throwable){
-//                Toast.makeText(MainActivity.this,"Disconnected", Toast.LENGTH_SHORT).show();
-//
-//            }
-//            public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception{
-//                Log.e("message ", String.valueOf(mqttMessage));
-//                Toast.makeText(MainActivity.this, "Crash Occurred", Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(MainActivity.this, alert.class);
-//                startActivity(intent);
-//
-//            }
-//            public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken){
-//
-//            }
-//        });
-//    }
+
     public void callPermissions(){
         String[] permissions = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
         Permissions.check(this/*context*/, permissions, null/*rationale*/, null/*options*/, new PermissionHandler() {
@@ -179,6 +168,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 callPermissions();
             }
         });
+    }
+    public void checkPermission1() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!Settings.canDrawOverlays(this)) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
+            }
+        }
     }
     public void requestLocationUpdates() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PermissionChecker.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED){

@@ -3,21 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:background="@drawable/blue"
+    android:background="@drawable/background4"
     android:layout_height="match_parent">
 
 
 
 
+
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/mEmptyListMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/title"
+        android:layout_marginTop="150dp"
+        android:text="NO CARS"
         android:textAlignment="center"
-        android:textColor="@color/yellow"
-
+        android:textColor="@color/white"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="24dp"
         android:clipToPadding="false"
         android:paddingRight="250dp"
@@ -37,38 +37,45 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
     </androidx.recyclerview.widget.RecyclerView>
 
+
     <TextView
         android:id="@+id/contacts"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
-        android:text="Contacts"
-        android:textColor="@color/yellow"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/contactsView"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="375dp"
+        android:fontFamily="@font/langdon"
+        android:text="CONTACTS"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventsplace"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/noContacts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="500dp"
+        android:text="NO CONTACTS"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contactsView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="320dp"
         android:clipToPadding="false"
         android:paddingBottom="60dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/contacts"
-        app:layout_constraintVertical_bias="0.41">
+        app:layout_constraintStart_toStartOf="@+id/contacts"
+        app:layout_constraintTop_toBottomOf="@+id/contacts">
 
     </androidx.recyclerview.widget.RecyclerView>
 

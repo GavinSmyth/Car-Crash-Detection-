@@ -11,10 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 public class contactAdapter extends RecyclerView.ViewHolder{
 
     public TextView contactName, contactPhone;
+    private View view;
     CheckBox chk;
     AdapterView.OnItemClickListener itemClickListener;
-
-
 
     public contactAdapter(@NonNull View itemView) {
         super(itemView);
@@ -22,5 +21,10 @@ public class contactAdapter extends RecyclerView.ViewHolder{
         contactPhone = itemView.findViewById(R.id.contactPhone);
         chk = itemView.findViewById(R.id.myCheckBox);
         this.setIsRecyclable(false);
+
+
     }
+
+
+
 }

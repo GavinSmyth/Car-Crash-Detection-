@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,10 +29,14 @@ public class contacts extends Fragment {
     private DatabaseReference databaseReference;
     String userId;
     contact Contact;
-
-
+    FirebaseDatabase database;
+    FirebaseUser user;
     TextView dataReceived;
     Activity context;
+    String key;
+
+
+
 
 
 
@@ -46,21 +52,28 @@ public class contacts extends Fragment {
         contactName = (EditText) getView().findViewById(R.id.nameReg);
         contactPhone = (EditText) getView().findViewById(R.id.phoneReg);
         upload = (Button) getView().findViewById(R.id.buttonReg);
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("phone");
-        userId = databaseReference.push().getKey();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        userId = user.getUid();
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("phone").child(userId);
+        key = databaseReference.push().getKey();
+
+
         Contact = new contact();
-        dataReceived = (TextView) getView().findViewById(R.id.datarecieved);
+
+
 
 
 
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseReference.addValueEventListener(new ValueEventListener() {
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         getValues();
-                        databaseReference.child(userId).setValue(Contact);
+                        databaseReference.child(key).setValue(Contact);
+
                         Toast.makeText(getActivity(),"Data Inserted.....", Toast.LENGTH_LONG).show();
                     }
 

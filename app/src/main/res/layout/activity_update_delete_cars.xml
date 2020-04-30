@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:background="@color/grey"
+    android:background="@drawable/blue"
     android:layout_height="match_parent">
     <ImageView
         android:layout_width="100dp"
@@ -18,10 +18,10 @@
         android:text="Add New Car"
         android:textAlignment="center"
         android:textSize="15sp"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/white" />
 
     <EditText
-        android:id="@+id/makeOfCar"
+        android:id="@+id/updateMake"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
@@ -32,11 +32,11 @@
         android:hint="Make of Car"
         android:inputType="textPersonName"
         android:padding="10dp"
-        android:textColor="@android:color/black"
-        android:textColorHint="@color/light_grey" />
+        android:textColor="@android:color/white"
+        android:textColorHint="#FAF7F8" />
 
     <EditText
-        android:id="@+id/typeOfCar"
+        android:id="@+id/updateType"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
@@ -47,11 +47,11 @@
         android:hint="Type of Car"
         android:inputType="textPersonName"
         android:padding="10dp"
-        android:textColor="@android:color/black"
-        android:textColorHint="@color/light_grey" />
+        android:textColor="@android:color/white"
+        android:textColorHint="#FAFAFA" />
 
     <EditText
-        android:id="@+id/yearOfCar"
+        android:id="@+id/updateYear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
@@ -61,12 +61,12 @@
         android:ems="10"
         android:hint="Year Car Was Made"
         android:padding="10dp"
-        android:textColor="@android:color/black"
-        android:textColorHint="@color/light_grey"
-         />
+        android:textColor="@android:color/white"
+        android:textColorHint="#FAFAFA"
+        />
 
     <Button
-        android:id="@+id/addCar"
+        android:id="@+id/updateCar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -74,7 +74,26 @@
         android:layout_marginRight="60dp"
         android:background="@drawable/roundbtn"
         android:textColor="#ffffff"
-        android:text="Add Car" />
+        android:text="Update Car" />
+    <Button
+        android:id="@+id/deleteCar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:background="@drawable/roundbtn"
+        android:textColor="#ffffff"
+        android:text="Delete Car" />
+    <TextView
+        android:id="@+id/cancelCar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel!"
+        android:textAlignment="center"
+        android:textSize="15sp"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/white" />
 
 
 

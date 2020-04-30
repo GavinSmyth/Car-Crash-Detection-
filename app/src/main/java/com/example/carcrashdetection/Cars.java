@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,6 +24,7 @@ public class Cars extends Fragment {
     EditText makeCar, typeCar, yearCar;
     Button upload;
     Event event;
+    FirebaseUser user;
     String userId;
     private DatabaseReference databaseReference;
 
@@ -39,8 +42,9 @@ public class Cars extends Fragment {
         yearCar = (EditText) getView().findViewById(R.id.yearOfCar);
         upload = (Button) getView().findViewById(R.id.addCar);
         event = new Event();
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Cars");
-        userId = databaseReference.push().getKey();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        userId = user.getUid();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Cars").child(userId);;
 
 
         upload.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +55,7 @@ public class Cars extends Fragment {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             getValues();
-                            databaseReference.child(userId).setValue(event);
+                            databaseReference.push().setValue(event);
                             Toast.makeText(getActivity(),"Data Inserted.....", Toast.LENGTH_LONG).show();
 
                         }

@@ -3,6 +3,7 @@ package com.example.carcrashdetection;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -77,6 +78,9 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
             final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
             wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "carcrashdetection:PARTIAL_WAKE_LOCK_TAG");
             createNotificationChannel(this);
+            Intent notificationIntent = new Intent(this, alert.class);
+            PendingIntent pendingIntent =
+                    PendingIntent.getActivity(this, 0, notificationIntent, 0);
             Notification notification = new NotificationCompat.Builder(this, "NOTIFICATION_CHANNEL").setSmallIcon
                     (R.drawable.add_car).setContentTitle("Title")
                     .setContentText("Content").build();
@@ -200,6 +204,10 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
         }
         @Override
         public void onDestroy() {
+            super.onDestroy();
+            if (wakeLock.isHeld()) {
+                wakeLock.release();
+            }
 
             if(clientPhone!=null) {
             /*unregisterResources is needed,otherwise receive this error:
@@ -214,11 +222,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
             }
             unregisterReceiver(m_ScreenOffReceiver);
             m_ScreenOffReceiver = null;
-
-            super.onDestroy();
-            if (wakeLock.isHeld()) {
-                wakeLock.release();
-            }
 
         }
 
