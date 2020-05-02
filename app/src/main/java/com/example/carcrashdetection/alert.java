@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
@@ -56,6 +57,8 @@ public class alert extends AppCompatActivity{
                 Toast.makeText(alert.this," Message sent", Toast.LENGTH_SHORT).show();
                 player.stop();
                 String phonenumber = home.number;
+                PreferenceManager.getDefaultSharedPreferences(alert.this).edit().putString("MYLABEL", phonenumber).apply();
+                PreferenceManager.getDefaultSharedPreferences(alert.this).getString("MYLABEL", "defaultStringIfNothingFound");
                 SmsManager smsManager = SmsManager.getDefault();
                 StringBuffer smsBody = new StringBuffer();
                 smsBody.append(Uri.parse("Car Crash Detected, Last known Location: " + mainActivity.uri));

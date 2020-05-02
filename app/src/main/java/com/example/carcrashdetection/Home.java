@@ -3,10 +3,15 @@ package com.example.carcrashdetection;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,9 +21,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -52,6 +59,8 @@ public class Home extends Fragment {
     Event event;
     TextView mEmptyListMessage;
     TextView noContacts;
+    ImageView emptyContacts;
+    ImageView emptyCars;
 
     Cars cars;
     public static String number;
@@ -99,13 +108,15 @@ public class Home extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         event = new Event();
-        eventsPlace = (RecyclerView) getView().findViewById(R.id.eventsplace);
+        eventsPlace = (RecyclerView) getView().findViewById(R.id.eventsPlace);
         contactsView = (RecyclerView) getView().findViewById(R.id.contactsView);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.divider));
         contactsView.addItemDecoration(dividerItemDecoration);
 //        databaseReference1.keepSynced(true);
 //        databaseReference.keepSynced(true);
+        emptyCars = (ImageView) getActivity().findViewById(R.id.emptyCars);
+        emptyContacts = (ImageView) getActivity().findViewById(R.id.emptyContacts);
         mEmptyListMessage = (TextView) getActivity().findViewById(R.id.mEmptyListMessage);
         noContacts = (TextView) getActivity().findViewById(R.id.noContacts);
         auth = FirebaseAuth.getInstance();
@@ -189,6 +200,9 @@ public class Home extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 noContacts.setVisibility(adapter1.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+                emptyContacts.setVisibility(adapter1.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+
+
             }
 
             @Override
@@ -200,13 +214,15 @@ public class Home extends Fragment {
 
 
 
-
         adapter = new FirebaseRecyclerAdapter<Event, eventAdapter>(options) {
             @Override
             protected void onBindViewHolder(@NonNull eventAdapter holder, final int position, @NonNull final Event model) {
                 holder.make.setText(model.getCarMake());
                 holder.type.setText(model.getCarType());
                 holder.year.setText(model.getCarYear());
+                holder.itemView.animate().scaleX(1f);
+                holder.itemView.animate().scaleY(1f);
+
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -231,14 +247,67 @@ public class Home extends Fragment {
             }
         };
         eventsPlace.setAdapter(adapter);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         eventsPlace.setLayoutManager(layoutManager);
+        final SnapHelper snapHelper  = new GravitySnapHelper(Gravity.START);
+        snapHelper.attachToRecyclerView(eventsPlace);
+       // set a timer for defaul item
+
+
+
+
+        eventsPlace.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                    View view = snapHelper.findSnapView(layoutManager);
+                    int pos = layoutManager.getPosition(view);
+                    RecyclerView.ViewHolder viewHolder = eventsPlace.findViewHolderForAdapterPosition(pos);
+
+                    LinearLayout eventparent = viewHolder.itemView.findViewById(R.id.eventParent);
+                    eventparent.animate().scaleY(1).scaleX(1).setDuration(350).setInterpolator(new AccelerateInterpolator()).start();
+
+
+                }
+                else {
+                    View view = snapHelper.findSnapView(layoutManager);
+                    int pos =  layoutManager.getPosition(view);
+                    RecyclerView.ViewHolder viewHolder = eventsPlace.findViewHolderForAdapterPosition(pos);
+
+                    LinearLayout eventparent = viewHolder.itemView.findViewById(R.id.eventParent);
+                    eventparent.animate().scaleY(0.7f).scaleX(0.7f).setDuration(350).setInterpolator(new AccelerateInterpolator()).start();
+
+
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mEmptyListMessage.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+                emptyCars.setVisibility(adapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+                final Handler handler = new Handler();
+                if(dataSnapshot.exists()) {
+                    handler.postDelayed(new Runnable() {
 
+                        @Override
+                        public void run() {
+                            //DO Something ater 1ms = 100m
+                            RecyclerView.ViewHolder viewHolderDefault = eventsPlace.findViewHolderForAdapterPosition(0);
+                            LinearLayout eventparentDefault = viewHolderDefault.itemView.findViewById(R.id.eventParent);
+                            eventparentDefault.animate().scaleY(1).scaleX(1).setDuration(350).setInterpolator(new AccelerateInterpolator()).start();
+
+
+                        }
+                    }, 100);
+                }
             }
 
             @Override
@@ -246,6 +315,7 @@ public class Home extends Fragment {
 
             }
         });
+
 
 
     }

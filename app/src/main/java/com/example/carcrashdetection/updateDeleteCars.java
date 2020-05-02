@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,6 +28,8 @@ public class updateDeleteCars extends AppCompatActivity {
     FirebaseUser user;
     String userId;
     private String passedKey;
+    Button start;
+    int button_status=1;
 
 
     @Override
@@ -36,10 +39,12 @@ public class updateDeleteCars extends AppCompatActivity {
 
         update = (Button) findViewById(R.id.updateCar);
         delete = (Button) findViewById(R.id.deleteCar);
+        start = (Button) findViewById(R.id.startService);
         cancel = (TextView) findViewById(R.id.cancelCar);
         make = (EditText) findViewById(R.id.updateMake);
         type = (EditText) findViewById(R.id.updateType);
         year = (EditText) findViewById(R.id.updateYear);
+
         passedKey = getIntent().getStringExtra("key");
 
         make.setText(getIntent().getStringExtra("make"));
@@ -78,6 +83,26 @@ public class updateDeleteCars extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
 
 
+            }
+        });
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(button_status == 1) {
+                    button_status =0;
+                    start.setText("Stop Car");
+                    Intent i = new Intent(updateDeleteCars.this, MQTTService.class);
+                    ContextCompat.startForegroundService(updateDeleteCars.this, i);
+                    Toast.makeText(updateDeleteCars.this, "Service Started", Toast.LENGTH_SHORT).show();
+                }else{
+                    button_status =1;
+                    start.setText("Start Car");
+                    Intent i = new Intent(updateDeleteCars.this, MQTTService.class);
+                    stopService(i);
+                    Toast.makeText(updateDeleteCars.this, "Service Stopped", Toast.LENGTH_SHORT).show();
+
+
+                }
             }
         });
     }

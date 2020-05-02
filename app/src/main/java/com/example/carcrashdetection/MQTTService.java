@@ -41,6 +41,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
         final String password = "1fIq2_CIwHZj";
 
 
+
         public void     MQTTService() {
             clientPhone = new MqttAndroidClient(this, serverUri, clientId);
             clientPhone.setCallback(new MqttCallback() {
@@ -240,5 +241,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
                 notificationManager.createNotificationChannel(channel);
             }
         }
+
 
     }

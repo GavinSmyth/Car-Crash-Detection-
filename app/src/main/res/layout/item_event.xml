@@ -1,73 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="240dp"
-    android:layout_height="wrap_content" android:layout_margin="10dp">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
 
+    android:layout_height="match_parent">
     <LinearLayout
         android:id="@+id/eventParent"
+        android:scaleX="0.6"
+        android:scaleY="0.6"
         android:layout_width="240dp"
         android:layout_height="300dp"
-        android:background="@color/grey"
-        android:layout_marginRight="24dp"
-        android:paddingRight="24dp"
-        android:orientation="vertical"
-        >
-
+        android:background="@drawable/car"
+        android:orientation="vertical">
         <ImageView
-            android:layout_width="230dp"
-            android:layout_marginTop="5dp"
-            android:layout_height="70dp"
-            android:layout_marginLeft="4dp"
+            android:layout_gravity="center"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
 
-            android:background="@drawable/bgitemcustom"
-            android:scaleType="centerCrop"
-            android:src="@drawable/crash" />
+            android:padding="5sp"
+            android:background="@drawable/add_car"
+            android:visibility="visible"
+            />
 
         <TextView
             android:id="@+id/make"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="10dp"
-            android:lineSpacingExtra="8dp"
-            android:text="Mercedes"
-            android:textAlignment="center"
+            android:text="Make"
 
-            android:textSize="22sp" />
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:lineSpacingExtra="8dp"
+            android:textSize="22sp"/>
 
         <TextView
             android:id="@+id/type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
+            android:text="Type"
             android:layout_marginTop="16dp"
-
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:lineSpacingExtra="8dp"
-            android:text="Saloon"
-            android:textAlignment="center"
-            android:textSize="22sp" />
+            android:textSize="22sp"
+            />
 
         <TextView
             android:id="@+id/year"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="10dp"
-            android:lineSpacingExtra="8dp"
-            android:text="2004"
-            android:textAlignment="center"
-            android:textSize="22sp" />
+            android:ems="10"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:textColor="#808080"
+            android:background="@null"
+            android:textSize="22sp"
+            android:hint="year"
+            android:inputType="date" />
 
-            <Button
-                android:id="@+id/connect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Connect"
-                android:textSize="14sp" />
+
+
+
+
+
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</LinearLayout>

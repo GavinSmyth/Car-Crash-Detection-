@@ -5,13 +5,19 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +36,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.nabinbhandari.android.permissions.PermissionHandler;
 import com.nabinbhandari.android.permissions.Permissions;
 
@@ -42,14 +49,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SensorManager sm;
     FirebaseAuth firebaseAuth;
     Button log;
+    NavigationView navigationView;
+    View  headerView;
     private DrawerLayout drawerLayout;
 //    MqttHelper mqttHelper;
     Activity context;
     public static String uri;
     private FusedLocationProviderClient fusedLocationClient;
     public static int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 5469;
-
+    TextView userEmail;
     private LocationRequest locationRequest;
+    ImageView imageView;
+    public static final int IMAGE_CODE = 1;
+
+    //Uri contentURI;
 
 
 
@@ -61,11 +74,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkPermission1();
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        // NavigationView Header
+        headerView =  navigationView.getHeaderView(0);
+        userEmail = (TextView) headerView.findViewById(R.id.userEmail);
+        imageView = (ImageView) headerView.findViewById(R.id.profilepic);
+        loadUserInfo();
 
 
-        Intent i = new Intent(MainActivity.this, MQTTService.class);
-
-        ContextCompat.startForegroundService(MainActivity.this, i);
         Home home = new Home();
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(locationRequest);
@@ -87,21 +103,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     new Home()).commit();
             navigationView.setCheckedItem(R.id.home);
         }
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openimage();
+            }
 
 
-
-
-
-
-
+        });
 
         ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.SEND_SMS},1);
         ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.FOREGROUND_SERVICE},1);
         ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW},1);
 
+
         callPermissions();
 
     }
+    private void openimage() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(galleryIntent, IMAGE_CODE);
+    }
+
+
+
+
     @TargetApi(Build.VERSION_CODES.M)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -116,8 +144,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
         }
+        if (requestCode == IMAGE_CODE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+        }
     }
+
+
 
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
@@ -195,7 +238,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }, getMainLooper());
     }else callPermissions();
     }
+    private void loadUserInfo(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user.getEmail() != null) {
+            userEmail.setText(user.getEmail());
+        }
 
-
+    }
 
 }

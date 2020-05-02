@@ -21,27 +21,29 @@
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:background="@drawable/empty"
+        android:padding="5sp"
+        android:id="@+id/emptyCars"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/mEmptyListMessage"
+        app:layout_constraintTop_toBottomOf="@id/mEmptyListMessage" />
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/eventsplace"
+        android:id="@+id/eventsPlace"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="24dp"
-        android:clipToPadding="false"
         android:paddingRight="250dp"
-        app:layout_constraintBottom_toTopOf="@id/contacts"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+                android:clipToPadding="false"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
+        android:layout_marginTop="60dp"/>
 
     <TextView
         android:id="@+id/contacts"
@@ -65,6 +67,18 @@
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/emptyContacts"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:background="@drawable/empty"
+        android:padding="5sp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/noContacts"
+        app:layout_constraintTop_toBottomOf="@id/noContacts" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contactsView"
