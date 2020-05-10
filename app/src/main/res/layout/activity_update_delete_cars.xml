@@ -5,11 +5,11 @@
     android:layout_height="match_parent">
     <ImageView
         android:layout_width="100dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
         android:layout_height="100dp"
         android:layout_marginLeft="150dp"
         android:layout_marginRight="100dp"
-        android:background="@drawable/crash"/>
+        android:background="@drawable/vehicle"/>
 
     <TextView
         android:id="@+id/description"
@@ -86,16 +86,7 @@
         android:background="@drawable/roundbtn"
         android:textColor="#ffffff"
         android:text="Delete Car" />
-    <Button
-        android:id="@+id/startService"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
-        android:background="@drawable/roundbtn"
-        android:textColor="#ffffff"
-        android:text="Start Car" />
+
     <TextView
         android:id="@+id/cancelCar"
         android:layout_width="match_parent"

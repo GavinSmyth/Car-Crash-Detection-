@@ -47,7 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
 
 
-
+        //button used to register new users to the app. checks that all credential are correct
         registerbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,6 +70,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 progressBar.setVisibility(View.VISIBLE);
 
+                //adds new user to firebase
                 firebaseAuth.createUserWithEmailAndPassword(emailReg, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(Task<AuthResult> task) {
@@ -93,6 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
 
             }
         });
+        //bring you back to login page
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

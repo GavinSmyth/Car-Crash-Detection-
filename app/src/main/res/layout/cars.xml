@@ -9,16 +9,17 @@
         android:layout_height="100dp"
         android:layout_marginLeft="150dp"
         android:layout_marginRight="100dp"
-        android:background="@drawable/crash"/>
+        android:background="@drawable/vehicle"/>
 
     <TextView
         android:id="@+id/description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/langdon"
         android:text="Add New Car"
         android:textAlignment="center"
-        android:textSize="15sp"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:textSize="15sp" />
 
     <EditText
         android:id="@+id/makeOfCar"

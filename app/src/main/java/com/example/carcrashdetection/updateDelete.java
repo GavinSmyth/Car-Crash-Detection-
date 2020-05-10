@@ -24,7 +24,6 @@ public class updateDelete extends AppCompatActivity {
     DatabaseReference databaseReference;
     FirebaseUser user;
     String userId;
-    private String key;
     private String passedKey;
 
     @Override
@@ -37,16 +36,18 @@ public class updateDelete extends AppCompatActivity {
         name = (EditText) findViewById(R.id.updateName);
         number = (EditText) findViewById(R.id.updateNumber);
 
+        //putting the text contained in the recyclerview item into the textfeilds on this page
         name.setText(getIntent().getStringExtra("contactName"));
         number.setText(getIntent().getStringExtra("contactPhone"));
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         userId = user.getUid();
+        //getting the key of the item so that the update or delete is linked to that item
         passedKey = getIntent().getStringExtra("key");
 
         databaseReference = FirebaseDatabase.getInstance().getReference("phone").child(userId);
 
-
+        //brings you back to the home page
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +55,7 @@ public class updateDelete extends AppCompatActivity {
             }
         });
 
-
+        //updates firebase with the new data that has been placed in the text views
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +67,7 @@ public class updateDelete extends AppCompatActivity {
             }
         });
 
+        //deletes the item from firebase
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

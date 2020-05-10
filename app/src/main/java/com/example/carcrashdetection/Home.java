@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,9 +36,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static android.content.Context.MODE_PRIVATE;
 
 public class Home extends Fragment {
@@ -47,12 +46,7 @@ public class Home extends Fragment {
     private FirebaseRecyclerOptions<Event> options;
     private FirebaseRecyclerOptions<contact> options1;
     private FirebaseRecyclerAdapter<contact, contactAdapter>adapter1;
-    private int lastCheckedPos = -1;
     private FirebaseRecyclerAdapter<Event, eventAdapter>adapter;
-    contactAdapter ContactAdpater;
-    List<contact> contactList;
-    eventAdapter EventAdapter;
-    private ArrayList<Event> eventList;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     DatabaseReference databaseReference;
     DatabaseReference databaseReference1;
@@ -61,9 +55,10 @@ public class Home extends Fragment {
     TextView noContacts;
     ImageView emptyContacts;
     ImageView emptyCars;
-
-    Cars cars;
+    Button startsCar;
+    public int start = 1;
     public static String number;
+    public static String name;
     private FirebaseUser user;
     private FirebaseAuth auth;
     String uid;
@@ -81,7 +76,7 @@ public class Home extends Fragment {
 
 
     }
-
+//telling the adapter to startlistening to firebase to get the data.
     @Override
     public void onStart() {
         super.onStart();
@@ -95,6 +90,7 @@ public class Home extends Fragment {
         }
     }
 
+//telling the adpter to stop listening to firebase.
     @Override
     public void onStop() {
         super.onStop();
@@ -115,6 +111,7 @@ public class Home extends Fragment {
         contactsView.addItemDecoration(dividerItemDecoration);
 //        databaseReference1.keepSynced(true);
 //        databaseReference.keepSynced(true);
+        startsCar = (Button) getActivity().findViewById(R.id.startsCar);
         emptyCars = (ImageView) getActivity().findViewById(R.id.emptyCars);
         emptyContacts = (ImageView) getActivity().findViewById(R.id.emptyContacts);
         mEmptyListMessage = (TextView) getActivity().findViewById(R.id.mEmptyListMessage);
@@ -127,11 +124,15 @@ public class Home extends Fragment {
         options1 = new FirebaseRecyclerOptions.Builder<contact>().setQuery(databaseReference1,contact.class).build();
         options = new FirebaseRecyclerOptions.Builder<Event>().setQuery(databaseReference,Event.class).build();
 
+        //this is a firebaserecycler adapeter used for getting the contact information added to firebase by the user and pulling
+        //it down into the home fragment
         adapter1 = new FirebaseRecyclerAdapter<contact, contactAdapter>(options1) {
             @Override
             protected void onBindViewHolder(@NonNull final contactAdapter holder, final int position, @NonNull final contact model) {
                 holder.contactName.setText(model.getContactName());
                 holder.contactPhone.setText(model.getContactPhone());
+
+                //the is is so that each item in the recyclerview can be clicked. It will then bring you to the updatDelete class
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -145,8 +146,11 @@ public class Home extends Fragment {
 
                     }
                 });
+                //setting up the sharepreference so the clicked state is saved when you exit the app
                 SharedPreferences prefs =  Home.this.getActivity().getSharedPreferences("check", MODE_PRIVATE);
                 String check_state = prefs.getString( "state", "default");
+
+                //this allows user to only click onto one contact in the recyclerview
                 if(check_state.equals("true"+String.valueOf(position))){
                     holder.chk.setChecked(true);
                 }
@@ -155,11 +159,14 @@ public class Home extends Fragment {
                 }else{
                     holder.chk.setChecked(false);
                 }
+
+                //starting some actions for when an item is checked
                 holder.chk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
                             holder.chk.setChecked(true);
+                            //if an item is checked then loop through the item to get the number textfeild and add it to string number
                             for (int i = 0; i < adapter1.getItemCount(); i++) {
                                 if (adapter1.getItem(i).isSelected(true)) {
                                     number = ((TextView) holder.itemView.findViewById(R.id.contactPhone)).getText().toString();
@@ -168,11 +175,15 @@ public class Home extends Fragment {
                                     Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
                                 }
                             }
+                            //Adding the item state to the shared preference and updating adapter/ this way state is saved when exiting the app
+                            //saving the number to sharedpreference as it is being used in the alert activity to send a message
                             SharedPreferences.Editor editor = Home.this.getActivity().getSharedPreferences("check", MODE_PRIVATE).edit();
                             editor.putString("state", "true"+String.valueOf(position));
+                            editor.putString("number", number);
                             editor.apply();
                             adapter1.notifyDataSetChanged();
                         }else {
+                            //setting the items that are unchecked and updating the adapter
                             holder.chk.setChecked(false);
                             SharedPreferences.Editor editor =  Home.this.getActivity().getSharedPreferences("check", MODE_PRIVATE).edit();
                             editor.putString("state", "false"+String.valueOf(position));
@@ -191,18 +202,17 @@ public class Home extends Fragment {
 
             }
         };
-
+        //adding the recyclerview to the activity
         contactsView.setAdapter(adapter1);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         contactsView.setLayoutManager(layoutManager1);
 
+        //if recyclerview is empty a picture and a message shows. when items are in the recyclerview the image and the textview are not visible
         databaseReference1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 noContacts.setVisibility(adapter1.getItemCount() == 0 ? View.VISIBLE : View.GONE);
                 emptyContacts.setVisibility(adapter1.getItemCount() == 0 ? View.VISIBLE : View.GONE);
-
-
             }
 
             @Override
@@ -213,10 +223,11 @@ public class Home extends Fragment {
 
 
 
-
+        //this is the firebaserecyclerview adapter for the cars items
         adapter = new FirebaseRecyclerAdapter<Event, eventAdapter>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull eventAdapter holder, final int position, @NonNull final Event model) {
+            protected void onBindViewHolder(@NonNull final eventAdapter holder, final int position, @NonNull final Event model) {
+
                 holder.make.setText(model.getCarMake());
                 holder.type.setText(model.getCarType());
                 holder.year.setText(model.getCarYear());
@@ -224,6 +235,53 @@ public class Home extends Fragment {
                 holder.itemView.animate().scaleY(1f);
 
 
+                final SharedPreferences sharedPreferences =  Home.this.getActivity().getSharedPreferences("check", MODE_PRIVATE);
+                final String state = sharedPreferences.getString( "key", "default");
+                //Savin the state of the cars. if sevice is turned on button on the car item will say "stop car" else "Start Car"
+                if(!state.equals("false")){
+                    holder.startsCar.setText("Stop Car");
+                }else {
+                    holder.startsCar.setText("Start Car");
+                }
+                holder.startsCar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if(state.equals("false")){
+                            //starting up the foreground service needed to read the car crash
+                            holder.startsCar.setText("Stop Car");
+                            Intent i = new Intent(Home.this.getActivity(), MQTTService.class);
+                            //looping through the item to get the name of car to be included in the message sent to emergency contact
+                            ContextCompat.startForegroundService(Home.this.getActivity(), i);
+                            for (int j = 0; j < adapter.getItemCount(); j++) {
+                                if (adapter.getItem(j).isSelected(true)) {
+                                     name = ((TextView) holder.itemView.findViewById(R.id.make)).getText().toString();
+                                } else {
+                                    Toast.makeText(getActivity(), "Error", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            //saving name and car state to a sharepreference
+                            SharedPreferences.Editor editor = Home.this.getActivity().getSharedPreferences("check", MODE_PRIVATE).edit();
+                            editor.putString("key", "true");
+                            editor.putString("name", name);
+                            editor.apply();
+                            adapter.notifyDataSetChanged();
+                            //Toast.makeText(Home.this.getContext(), "Service Started", Toast.LENGTH_SHORT).show();
+                        }else{
+                            //saving name and car state to a sharepreference when service is off
+                            holder.startsCar.setText("Start Car");
+                            Intent i = new Intent(Home.this.getActivity(), MQTTService.class);
+                            getActivity().stopService(i);
+                            Toast.makeText(Home.this.getContext(), "Service Stoped", Toast.LENGTH_SHORT).show();
+                            SharedPreferences.Editor editor =  Home.this.getActivity().getSharedPreferences("check", MODE_PRIVATE).edit();
+                            editor.putString("key", "false");
+                            editor.apply();
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+
+                //setting it up so that items in this recyclerview can be clicked. brings you to the updateDeleteCars class
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -249,13 +307,15 @@ public class Home extends Fragment {
         eventsPlace.setAdapter(adapter);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         eventsPlace.setLayoutManager(layoutManager);
+        //used so when you are scrolling it locks onto the nearest item
         final SnapHelper snapHelper  = new GravitySnapHelper(Gravity.START);
         snapHelper.attachToRecyclerView(eventsPlace);
        // set a timer for defaul item
 
 
 
-
+        //this is used for the scolling of the items. in the xml item in the view are scaled down. this sets it up so that if you scroll
+        //onto an item in the view it scales the item back to normal size 1.
         eventsPlace.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -269,8 +329,10 @@ public class Home extends Fragment {
                     eventparent.animate().scaleY(1).scaleX(1).setDuration(350).setInterpolator(new AccelerateInterpolator()).start();
 
 
+
                 }
                 else {
+                    //when it is not on the item it brings it back down
                     View view = snapHelper.findSnapView(layoutManager);
                     int pos =  layoutManager.getPosition(view);
                     RecyclerView.ViewHolder viewHolder = eventsPlace.findViewHolderForAdapterPosition(pos);
@@ -287,7 +349,9 @@ public class Home extends Fragment {
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
-
+        //this shows a picture and textview when the recyclerview is empty and geting rid of them when items are it the recyclerview.
+        //it also expands the first item that is in the recyclerview if it exists. this is so that you dont have to touch the first item#
+        //for it to expand
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -12,11 +12,12 @@
         android:background="@color/grey"
         android:orientation="vertical">
 
+
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="50dp"
             android:fontFamily="@font/langdon"
             android:text="@string/title"
             android:textAlignment="center"
@@ -32,17 +33,24 @@
             android:textAlignment="center"
             android:textColor="@android:color/black"
             android:textSize="15sp" />
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="150dp"
+            android:layout_marginRight="100dp"
+            android:background="@drawable/vehicle"/>
 
         <EditText
             android:id="@+id/nameReg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="60dp"
             android:layout_marginRight="50dp"
             android:background="@drawable/round"
             android:ems="10"
-            android:hint="Name"
+            android:hint="@string/name"
             android:inputType="textPersonName"
             android:padding="10dp"
             android:textColor="@android:color/black"
@@ -57,7 +65,7 @@
             android:layout_marginRight="50dp"
             android:background="@drawable/round"
             android:ems="10"
-            android:hint="Email"
+            android:hint="@string/Email"
             android:inputType="textPersonName"
             android:padding="10dp"
             android:textColor="@android:color/black"
@@ -86,7 +94,7 @@
             android:layout_marginRight="50dp"
             android:background="@drawable/round"
             android:ems="10"
-            android:hint="Phone Number"
+            android:hint="@string/phone"
             android:padding="10dp"
             android:textColor="@android:color/black"
             android:textColorHint="@color/light_grey"

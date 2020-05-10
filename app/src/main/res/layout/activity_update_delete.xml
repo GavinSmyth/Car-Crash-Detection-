@@ -11,14 +11,14 @@
         android:layout_height="100dp"
         android:layout_marginLeft="150dp"
         android:layout_marginRight="100dp"
-        android:background="@drawable/crash"/>
+        android:background="@drawable/vehicle"/>
 
     <TextView
         android:id="@+id/updateDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/langdon"
-        android:text="Create New Contact"
+        android:text="Update Contact"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="15sp" />

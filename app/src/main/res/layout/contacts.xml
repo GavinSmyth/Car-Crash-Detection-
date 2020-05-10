@@ -11,7 +11,7 @@
             android:layout_height="100dp"
             android:layout_marginLeft="150dp"
             android:layout_marginRight="100dp"
-            android:background="@drawable/crash"/>
+            android:background="@drawable/vehicle"/>
 
         <TextView
             android:id="@+id/description"
@@ -24,7 +24,7 @@
             android:textSize="15sp" />
 
         <EditText
-            android:id="@+id/nameReg"
+            android:id="@+id/nameContact"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
@@ -40,7 +40,7 @@
 
 
         <EditText
-            android:id="@+id/phoneReg"
+            android:id="@+id/phoneContact"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
@@ -55,7 +55,7 @@
             android:inputType="textPhonetic" />
 
         <Button
-            android:id="@+id/buttonReg"
+            android:id="@+id/uploadContact"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"

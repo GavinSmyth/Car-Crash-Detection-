@@ -49,22 +49,17 @@ public class contacts extends Fragment {
 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        contactName = (EditText) getView().findViewById(R.id.nameReg);
-        contactPhone = (EditText) getView().findViewById(R.id.phoneReg);
-        upload = (Button) getView().findViewById(R.id.buttonReg);
+        contactName = (EditText) getView().findViewById(R.id.nameContact);
+        contactPhone = (EditText) getView().findViewById(R.id.phoneContact);
+        upload = (Button) getView().findViewById(R.id.uploadContact);
         user = FirebaseAuth.getInstance().getCurrentUser();
         userId = user.getUid();
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("phone").child(userId);
         key = databaseReference.push().getKey();
-
-
         Contact = new contact();
 
-
-
-
-
+        //uploading the new contact to firebase
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +67,7 @@ public class contacts extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         getValues();
-                        databaseReference.child(key).setValue(Contact);
+                        databaseReference.push().setValue(Contact);
 
                         Toast.makeText(getActivity(),"Data Inserted.....", Toast.LENGTH_LONG).show();
                     }
@@ -88,7 +83,7 @@ public class contacts extends Fragment {
 
     }
 
-
+    //getting the values from the textfeilds and setting them to the contact object
     private void getValues(){
         Contact.setContactName(contactName.getText().toString());
         Contact.setContactPhone(contactPhone.getText().toString());

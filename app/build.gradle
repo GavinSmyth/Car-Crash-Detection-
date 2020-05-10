@@ -37,7 +37,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:17.1.2'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.google.firebase:firebase-database:19.2.1'
-    testImplementation 'junit:junit:4.12'
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
+    testImplementation 'org.robolectric:robolectric:4.0'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.github.rubensousa:gravitysnaphelper-compat:2.0'
@@ -46,7 +47,6 @@ dependencies {
     implementation "androidx.cardview:cardview:1.0.0"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'org.jetbrains:annotations-java5:15.0'
     implementation 'org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.1.0'
     implementation 'org.eclipse.paho:org.eclipse.paho.android.service:1.1.1'
@@ -54,5 +54,17 @@ dependencies {
     implementation 'com.nabinbhandari.android:permissions:3.8'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support:support-annotations:24.0.0'
+    androidTestImplementation 'com.android.support.test:runner:0.5'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.0'
+    androidTestImplementation 'com.21buttons:fragment-test-rule:2.0.1'
+    debugImplementation 'com.21buttons:fragment-test-rule-extras:2.0.1'
+
+
 
 }

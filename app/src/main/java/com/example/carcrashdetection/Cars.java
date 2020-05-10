@@ -46,7 +46,7 @@ public class Cars extends Fragment {
         userId = user.getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Cars").child(userId);;
 
-
+        //upload button for uploading a new car to firebase
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,6 +54,7 @@ public class Cars extends Fragment {
                     databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            //metho
                             getValues();
                             databaseReference.push().setValue(event);
                             Toast.makeText(getActivity(),"Data Inserted.....", Toast.LENGTH_LONG).show();
@@ -73,7 +74,7 @@ public class Cars extends Fragment {
 
     }
 
-
+    //getting the car values from the text values and setting them to the event obeject
     private void getValues(){
         event.setCarMake(makeCar.getText().toString());
         event.setCarType(typeCar.getText().toString());

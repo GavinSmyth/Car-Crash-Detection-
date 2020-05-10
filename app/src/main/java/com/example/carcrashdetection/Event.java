@@ -5,6 +5,7 @@ public class Event {
     String carMake;
     String carType;
     String CarYear;
+    private Boolean isSelected;
 
 
     public Event() {
@@ -38,5 +39,9 @@ public class Event {
 
     public void setCarYear(String carYear) {
         CarYear = carYear;
+    }
+
+    public boolean isSelected(boolean selected){
+        return isSelected= selected;
     }
 }

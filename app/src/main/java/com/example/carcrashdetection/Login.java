@@ -1,7 +1,11 @@
  package com.example.carcrashdetection;
 
- import android.content.Intent;
+ import android.annotation.TargetApi;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +23,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import static com.example.carcrashdetection.MainActivity.ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE;
+
  public class Login extends AppCompatActivity {
     EditText mEmail, mPassword;
     Button mLoginButton;
@@ -33,6 +39,8 @@ import com.google.firebase.auth.FirebaseUser;
         setContentView(R.layout.activity_login);
         title = (TextView) findViewById(R.id.title1);
         FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
+
+        checkPermission1();
         if (user != null) {
             // User is signed in
             Intent i = new Intent(Login.this, MainActivity.class);
@@ -53,7 +61,8 @@ import com.google.firebase.auth.FirebaseUser;
 //            startActivity(new Intent(getApplicationContext(),MainActivity.class));
 //
 //        }
-
+        //loging in the user to the app. checks if any of the edit texts are empty
+        //password must also be more than 6 charactrs long
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +82,7 @@ import com.google.firebase.auth.FirebaseUser;
                     return;
                 }
                 progressBar.setVisibility(View.VISIBLE);
-
+                //checks if everything matches and either lets you into the app or checks for errors
                 firebaseAuth.signInWithEmailAndPassword(emailReg,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(Task<AuthResult> task) {
@@ -90,6 +99,7 @@ import com.google.firebase.auth.FirebaseUser;
                 });
             }
         });
+        //brings you to the register page
         mCreateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,4 +107,32 @@ import com.google.firebase.auth.FirebaseUser;
             }
         });
     }
+     @TargetApi(Build.VERSION_CODES.M)
+     @Override
+     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+         super.onActivityResult(requestCode, resultCode, data);
+         //manage overlay permission
+         if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
+             if (!Settings.canDrawOverlays(this)) {
+                 // You don't have permission
+                 checkPermission1();
+             } else {
+                 // Do as per your logic
+             }
+
+         }
+     }
+
+
+
+     //asks user for permissions for overlay
+     public void checkPermission1() {
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+             if (!Settings.canDrawOverlays(this)) {
+                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                         Uri.parse("package:" + getPackageName()));
+                 startActivityForResult(intent, ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE);
+             }
+         }
+     }
 }

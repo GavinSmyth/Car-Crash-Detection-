@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
             android:fontFamily="@font/langdon"
-            android:text="Alarm"
+            android:text="@string/alarm"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="25sp" />
@@ -50,7 +50,7 @@
             android:id="@+id/stop"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Turn Off"
+            android:text="@string/turn_off"
             android:background="@drawable/roundbtn"
             android:layout_marginTop="50dp"
             android:layout_marginRight="100dp"
